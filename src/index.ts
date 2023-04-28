@@ -82,7 +82,7 @@ export const newTypeScriptProjectGenerator = async function(folderName: string):
             "description": "",
             "main": "index.js",
             "scripts": {
-                "release:live-server": "live-server build --open=fusion.ssg.docs --quiet",
+                "release:live-server": "live-server build --quiet",
                 "release:fusion": "fusion release",
                 "release:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run release:fusion\"",
                 "release": "npm run release:build & npm run release:live-server",
