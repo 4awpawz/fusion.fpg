@@ -1,7 +1,7 @@
 {
     "name": "@4awpawz/fusion-typescript-project-generator",
     "type": "module",
-    "version": "0.0.0-alpha-2",
+    "version": "0.0.0-alpha-3",
     "description": "fusion.ssg TypeScript project generator",
     "main": "dist/index.js",
     "scripts": {
