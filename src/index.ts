@@ -73,7 +73,7 @@ export const newTypeScriptProjectGenerator = async function(folderName: string):
                 ]
             }
         }, { spaces: 2 });
-        await fs.outputFile(join(folderName, ".gitignore"), ".meta\nbuild\nlib\nnode_modules\nassets.json");
+        await fs.outputFile(join(folderName, ".gitignore"), ".DS_Store\n.meta\n.assets.json\nbuild\nlib\nnode_modules");
         await fs.outputJSON(join(folderName, "fusion.json"), {});
         await fs.outputJSON(join(folderName, "package.json"), {
             "name": `${folderName}`,
