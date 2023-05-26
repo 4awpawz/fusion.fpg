@@ -1,7 +1,0 @@
----
-tokens: {
-title: Success!
-}
----
-
-<Welcome />

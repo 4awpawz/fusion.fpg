@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "None",
+        "moduleResolution": "node",
+        "allowJs": true,
+        "target": "es2022",
+        "strict": true,
+        "jsx": "preserve",
+        "jsxImportSource": "preact",
+        "noEmit": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "typeRoots": ["node_modules/@types"],
+        "moduleDetection": "force",
+        "ignoreDeprecations": "5.0"
+    }
+}

@@ -5,10 +5,28 @@ import { join } from "path";
 import fileDirName from "./lib/fileDirName.js";
 
 export const newTypeScriptProjectGenerator = async function(folderName: string): Promise<void> {
+
+    const { __dirname } = fileDirName(import.meta);
+
+    // Show version.
+    try {
+        const packageJson = await fs.readJson(join(__dirname, "..", "package.json"));
+        const version = packageJson.version;
+        console.log(chalk.blueBright(`fusion.ssg generator ${version}`));
+    } catch (error) {
+        console.error(chalk.red(`Error: reading package.json!`));
+        return;
+    }
+
+    // Guard against tergeting an existing folder.
+
     if (fs.existsSync(folderName)) {
         console.error(chalk.red(`Error: Folder "${folderName}" already exists!`));
         return;
     }
+
+    // Create the project folder.
+
     console.log(chalk.blueBright(`creating project "${folderName}"...`));
     try {
         await fs.ensureDir(folderName);
@@ -16,118 +34,79 @@ export const newTypeScriptProjectGenerator = async function(folderName: string):
         console.error(chalk.red(`there was error: ${error}`));
         process.abort();
     }
-    const { __dirname } = fileDirName(import.meta);
+
+    // Create the pject.
+
     try {
-        // Create src folder  and its subfolders.
+        // Components
+
         await fs.ensureDir(join(folderName, "src", "components"));
         const welcomeTSX = await fs.readFile(join(__dirname, "..", "assets", "Welcome.tsx"));
         await fs.promises.writeFile(join(folderName, "src", "components", "Welcome.tsx"), welcomeTSX);
+
+        // CSS
+
+        // picoMinCSS
         await fs.ensureDir(join(folderName, "src", "css", "libs", "pico"));
         const picoMinCSS = await fs.readFile(join(__dirname, "..", "assets", "pico.min.css"));
         await fs.promises.writeFile(join(folderName, "src", "css", "libs", "pico", "pico.min.css"), picoMinCSS);
+        // picoMinCSSMap
         const picoMinCSSMap = await fs.readFile(join(__dirname, "..", "assets", "pico.min.css.map"));
         await fs.promises.writeFile(join(folderName, "src", "css", "libs", "pico", "pico.min.css.map"), picoMinCSSMap);
+        // projectCSS
         const projectCSS = await fs.readFile(join(__dirname, "..", "assets", "project.css"));
         await fs.promises.writeFile(join(folderName, "src", "css", "project.css"), projectCSS);
+
+        // src folders
+
+        // src/data
         await fs.ensureDir(join(folderName, "src", "data"));
+        // src/etc
         await fs.ensureDir(join(folderName, "src", "etc"));
+        // src/includes
         await fs.ensureDir(join(folderName, "src", "includes"));
+        // src/media
         await fs.ensureDir(join(folderName, "src", "media"));
+        // src/pages
         await fs.ensureDir(join(folderName, "src", "pages"));
+        // src/pages/default.html
         const defaultHTML = await fs.readFile(join(__dirname, "..", "assets", "default.html"));
         await fs.promises.writeFile(join(folderName, "src", "pages", "default.html"), defaultHTML);
+        // src/scripts
         await fs.ensureDir(join(folderName, "src", "scripts"));
+        // src/templates/posts
         await fs.ensureDir(join(folderName, "src", "templates", "posts"));
+        // src/templates/index.md
         const indexMD = await fs.readFile(join(__dirname, "..", "assets", "index.md"));
         await fs.promises.writeFile(join(folderName, "src", "templates", "index.md"), indexMD);
-        // Create project root files.
-        await fs.outputFile(join(folderName, ".eslintignore"), ".meta\nbuild\nlib\nnode_modules");
-        await fs.outputJSON(join(folderName, ".eslintrc.json"), {
-            "root": true,
-            "env": {
-                "browser": true,
-                "node": true,
-                "es2021": true
-            },
-            "parser": "@typescript-eslint/parser",
-            "plugins": [
-                "@typescript-eslint"
-            ],
-            "extends": [
-                "eslint:recommended",
-                "plugin:@typescript-eslint/eslint-recommended",
-                "plugin:@typescript-eslint/recommended"
-            ],
-            "parserOptions": {
-                "ecmaVersion": "latest",
-                "sourceType": "module",
-                "ecmaFeatures": {
-                    "jsx": true,
-                    "tsx": true
-                }
-            },
-            "rules": {
-                "semi": [
-                    2,
-                    "always"
-                ]
-            }
-        }, { spaces: 2 });
-        await fs.outputFile(join(folderName, ".gitignore"), ".DS_Store\n.meta\n.assets.json\nbuild\nlib\nnode_modules");
+
+        // Project root files.
+
+        // .eslintignore
+        const eslintignore = await fs.readFile(join(__dirname, "..", "assets", ".eslintignore"));
+        await fs.promises.writeFile(join(folderName, ".eslintignore"), eslintignore);
+        // .eslintrc.json
+        const eslintrcjson = await fs.readJson(join(__dirname, "..", "assets", ".eslintrc.json"));
+        await fs.outputJSON(join(folderName, ".eslintrc.json"), eslintrcjson, { spaces: 4 });
+        // .gitignore
+        const gitignore = await fs.readFile(join(__dirname, "..", "assets", "gi"));
+        await fs.promises.writeFile(join(folderName, ".gitignore"), gitignore);
+        // fusion.json
         await fs.outputJSON(join(folderName, "fusion.json"), {});
-        await fs.outputJSON(join(folderName, "package.json"), {
-            "name": `${folderName}`,
-            "type": "module",
-            "version": "1.0.0",
-            "description": "",
-            "main": "index.js",
-            "scripts": {
-                "release:live-server": "live-server build --quiet",
-                "release:fusion": "fusion release",
-                "release:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run release:fusion\"",
-                "release": "npm run release:build & npm run release:live-server",
-                "development:live-server": "live-server build --quiet",
-                "development:fusion": "fusion build",
-                "development:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run development:fusion\"",
-                "development": "npm run development:build & npm run development:live-server"
-            },
-            "keywords": [],
-            "author": "",
-            "license": "ISC",
-            "devDependencies": {
-                "@tsconfig/node16-strictest-esm": "^1.0.3",
-                "@types/node": "^18.11.7",
-                "@types/react": "^18.0.28",
-                "@typescript-eslint/eslint-plugin": "^5.41.0",
-                "@typescript-eslint/parser": "^5.41.0",
-                "chokidar-cli": "^3.0.0",
-                "eslint": "^8.26.0",
-                "eslint-plugin-import": "^2.26.0",
-                "live-server": "^1.2.2",
-                "preact": "^10.13.1"
-            }
-        }, { spaces: 2 });
-        await fs.outputJSON(join(folderName, "tsconfig.json"), {
-            "compilerOptions": {
-                "module": "ES2022",
-                "moduleResolution": "node",
-                "rootDir": "src/components",
-                "outDir": "lib/",
-                "allowJs": true,
-                "target": "es2021",
-                "strict": true,
-                "jsx": "preserve",
-                "jsxImportSource": "preact",
-                "noImplicitAny": true,
-                "typeRoots": ["node_modules/@types"],
-                "baseUrl": "./"
-            },
-            "include": ["./src/components/**/*", "./src/components/@types"]
-        }, { spaces: 2 });
+        // package.json
+        let packagejson = await fs.readJson(join(__dirname, "..", "assets", "package.json"));
+        packagejson = { ...packagejson, ...{ name: `${folderName}`, description: `${folderName}` } };
+        await fs.outputJSON(join(folderName, "package.json"), packagejson, { spaces: 4 });
+        // tsconfig.json
+        const tsconfigjson = await fs.readJson(join(__dirname, "..", "assets", "tsconfig.json"));
+        await fs.outputJSON(join(folderName, "tsconfig.json"), tsconfigjson, { spaces: 4 });
     } catch (error) {
         console.error(chalk.red(`there was error: ${error}`));
         process.abort();
     }
+
+    // Install Project Dependencies.
+
     console.log(chalk.blueBright("installing project dependencies..."));
     try {
         const runtimeCWD = join(process.cwd(), folderName);
@@ -137,6 +116,9 @@ export const newTypeScriptProjectGenerator = async function(folderName: string):
         console.error(chalk.red(`there was error: ${error}`));
         process.abort();
     }
+
+    //  Done!
+
     console.log(chalk.blueBright(`project "${folderName}" has been created along with all its dependencies`));
     console.log(chalk.blueBright(`you can now "cd ${folderName}; npm run development"`));
 };

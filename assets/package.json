@@ -1,0 +1,30 @@
+{
+    "name": "",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "release:live-server": "live-server build --quiet --entry-file=/404.html",
+        "release:fusion": "fusion release",
+        "release:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run release:fusion\"",
+        "release": "npm run release:build & npm run release:live-server",
+        "development:live-server": "live-server build --quiet --entry-file=/404.html",
+        "development:fusion": "fusion build",
+        "development:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run development:fusion\"",
+        "development": "npm run development:build & npm run development:live-server"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/react": "^18.2.7",
+        "@typescript-eslint/eslint-plugin": "^5.41.0",
+        "@typescript-eslint/parser": "^5.41.0",
+        "chokidar-cli": "^3.0.0",
+        "eslint": "^8.26.0",
+        "live-server": "^1.2.2",
+        "preact": "^10.15.0",
+        "typescript": "^5.0.4"
+    }
+}
