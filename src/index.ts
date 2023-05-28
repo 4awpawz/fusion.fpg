@@ -63,6 +63,9 @@ export const newTypeScriptProjectGenerator = async function(folderName: string):
         await fs.ensureDir(join(folderName, "src", "data"));
         // src/etc
         await fs.ensureDir(join(folderName, "src", "etc"));
+        // src/etc/404.html
+        const fourzerofourHTML = await fs.readFile(join(__dirname, "..", "assets", "404.html"));
+        await fs.promises.writeFile(join(folderName, "src", "etc", "404.html"), fourzerofourHTML);
         // src/includes
         await fs.ensureDir(join(folderName, "src", "includes"));
         // src/media
