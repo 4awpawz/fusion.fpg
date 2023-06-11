@@ -1,5 +1,15 @@
-# fusion-typescript-project-generator
+# fusion.fpg project generator
 
-Used internally by _fusion.ssg_ to generate a new fusion.ssg TypeScript project.
+v1.0.0
 
-v1.0.0-beta-8
+## Installation Instructions
+
+Run the following in your terminal to install fusion.fpg:
+
+```shell
+npm i -g @4awpawz/fusion.fpg
+```
+
+# Usage
+
+From the command line, run `fpg` to display help.

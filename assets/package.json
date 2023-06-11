@@ -5,26 +5,28 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "release:live-server": "live-server build --quiet --entry-file=/404.html",
+        "release:bs": "node browsersync.js release",
         "release:fusion": "fusion release",
         "release:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run release:fusion\"",
-        "release": "npm run release:build & npm run release:live-server",
-        "development:live-server": "live-server build --quiet --entry-file=/404.html",
+        "release": "concurrently --raw \"npm run release:build\" \"npm run release:bs\"",
+        "development:bs": "node browsersync.js development",
         "development:fusion": "fusion build",
         "development:build": "chokidar \"src/**/*\" \"fusion.json\" --silent true --initial true -c \"npm run development:fusion\"",
-        "development": "npm run development:build & npm run development:live-server"
+        "development": "concurrently --raw \"npm run development:build\" \"npm run development:bs\""
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@types/react": "^18.2.7",
-        "@typescript-eslint/eslint-plugin": "^5.41.0",
-        "@typescript-eslint/parser": "^5.41.0",
+        "@types/react": "^18.2.13",
+        "@typescript-eslint/eslint-plugin": "^5.60.0",
+        "@typescript-eslint/parser": "^5.60.0",
+        "browser-sync": "^2.29.3",
+        "chalk": "^5.2.0",
         "chokidar-cli": "^3.0.0",
-        "eslint": "^8.26.0",
-        "live-server": "^1.2.2",
-        "preact": "^10.15.0",
-        "typescript": "^5.0.4"
+        "concurrently": "^8.2.0",
+        "eslint": "^8.43.0",
+        "preact": "^10.15.1",
+        "typescript": "^5.1.3"
     }
 }

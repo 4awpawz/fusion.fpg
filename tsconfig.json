@@ -8,6 +8,7 @@
         "outDir": "dist",
         "removeComments": true,
         "sourceMap": true,
+        "strict": true,
         "jsx": "react-jsx",
         "jsxImportSource": "preact",
         "noUnusedLocals": true,
