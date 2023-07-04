@@ -56,12 +56,11 @@ if (process.argv.length === 2 || process.argv.length === 3
 
 // new
 
-const isTargetFolderValid = function(): boolean {
-    return process.argv.length === 3 && typeof process.argv[2] === "string" && process.argv[2].startsWith("n") || process.argv[2]?.startsWith("new") as boolean;
+const isNewCommand = function(): boolean {
+    return typeof process.argv[2] === "string" && process.argv[2] === "n" || typeof process.argv[2] === "string" && process.argv[2] === "new";
 };
 
-// Guard against target folder not being valid.
-if (!isTargetFolderValid) {
+if (!isNewCommand()) {
     help();
     process.exit();
 }
