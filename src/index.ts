@@ -4,7 +4,7 @@ import fs from "fs-extra";
 import { join } from "path";
 import fileDirName from "./lib/fileDirName.js";
 
-export const projectGenerator = async function(targetFolder: string): Promise<void> {
+export const projectGenerator = async function(targetFolder: string, options: { bare: boolean }): Promise<void> {
 
     const { __dirname } = fileDirName(import.meta);
 
@@ -45,21 +45,19 @@ export const projectGenerator = async function(targetFolder: string): Promise<vo
         // Components
 
         await fs.ensureDir(join(targetFolder, "src", "components"));
-        const welcomeTSX = await fs.readFile(join(__dirname, "..", "assets", "Welcome.tsx"));
-        await fs.promises.writeFile(join(targetFolder, "src", "components", "Welcome.tsx"), welcomeTSX);
+        if (!options.bare) {
+            const welcomeTSX = await fs.readFile(join(__dirname, "..", "assets", "Welcome.tsx"));
+            await fs.promises.writeFile(join(targetFolder, "src", "components", "Welcome.tsx"), welcomeTSX);
+        }
 
         // CSS
+        await fs.ensureDir(join(targetFolder, "src", "css"));
 
-        // picoMinCSS
-        await fs.ensureDir(join(targetFolder, "src", "css", "libs", "pico"));
-        const picoMinCSS = await fs.readFile(join(__dirname, "..", "assets", "pico.min.css"));
-        await fs.promises.writeFile(join(targetFolder, "src", "css", "libs", "pico", "pico.min.css"), picoMinCSS);
-        // picoMinCSSMap
-        const picoMinCSSMap = await fs.readFile(join(__dirname, "..", "assets", "pico.min.css.map"));
-        await fs.promises.writeFile(join(targetFolder, "src", "css", "libs", "pico", "pico.min.css.map"), picoMinCSSMap);
-        // projectCSS
-        const projectCSS = await fs.readFile(join(__dirname, "..", "assets", "project.css"));
-        await fs.promises.writeFile(join(targetFolder, "src", "css", "project.css"), projectCSS);
+        if (!options.bare) {
+            // projectCSS
+            const projectCSS = await fs.readFile(join(__dirname, "..", "assets", "project.css"));
+            await fs.promises.writeFile(join(targetFolder, "src", "css", "project.css"), projectCSS);
+        }
 
         // src folders
 
@@ -74,20 +72,19 @@ export const projectGenerator = async function(targetFolder: string): Promise<vo
         // src/pages
         await fs.ensureDir(join(targetFolder, "src", "pages"));
         // src/pages/default.html
-        const defaultHTML = await fs.readFile(join(__dirname, "..", "assets", "default.html"));
+        const defaultHTML = await (!options.bare ? fs.readFile(join(__dirname, "..", "assets", "default.html")) : fs.readFile(join(__dirname, "..", "assets", "defaultBare.html")));
         await fs.promises.writeFile(join(targetFolder, "src", "pages", "default.html"), defaultHTML);
-        // src/pages/404.html
-        const fourzerofourHTML = await fs.readFile(join(__dirname, "..", "assets", "404.html"));
-        await fs.promises.writeFile(join(targetFolder, "src", "pages", "404.html"), fourzerofourHTML);
         // src/scripts
         await fs.ensureDir(join(targetFolder, "src", "scripts"));
-        // src/templates/posts
+        // src/templates && src/templates/posts
         await fs.ensureDir(join(targetFolder, "src", "templates", "posts"));
-        // src/templates/index.md
-        const indexMD = await fs.readFile(join(__dirname, "..", "assets", "index.md"));
-        await fs.promises.writeFile(join(targetFolder, "src", "templates", "index.md"), indexMD);
-        const fourzerofourMD = await fs.readFile(join(__dirname, "..", "assets", "404.md"));
-        await fs.promises.writeFile(join(targetFolder, "src", "templates", "404.md"), fourzerofourMD);
+        if (!options.bare) {
+            // src/templates/index.md
+            const indexMD = await fs.readFile(join(__dirname, "..", "assets", "index.md"));
+            await fs.promises.writeFile(join(targetFolder, "src", "templates", "index.md"), indexMD);
+            const fourzerofourHTML = await fs.readFile(join(__dirname, "..", "assets", "404template.html"));
+            await fs.promises.writeFile(join(targetFolder, "src", "templates", "404.html"), fourzerofourHTML);
+        }
 
         // Project root files.
 

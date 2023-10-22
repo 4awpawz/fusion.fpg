@@ -1,3 +1,11 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
 p {
     font-size: calc(1rem + 4px);
+}
+ul {
+    padding-left: 15px;
+    list-style-type: disc;
 }
