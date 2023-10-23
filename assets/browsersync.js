@@ -36,7 +36,6 @@ function _404() {
         const pathTo404html = join(__dirname, "build", baseURL, "404.html");
         return fs.readFileSync(pathTo404html);
     } catch (error) {
-        console.log(chalk.yellowBright("Warning: this site is missing a 404.html doc - using default 404.html."));
         return "<html style=\"height: 100%;\"><body style=\"height: 100%; background-color: red;\"><div style=\"width: 100%; height: 100%; display: table; text-align: center;\"><div style=\"display: table-cell; vertical-align: middle;\"><p style=\"font-size: 4rem; color: white; margin-top: 0; font-weight: bold;\">Page Not Found!</p><p style=\"font-size: 2rem; color: black; margin-bottom: 0;\">Please create your own 404.html page for your project.</p></div></div></body></html>";
     }
 }
