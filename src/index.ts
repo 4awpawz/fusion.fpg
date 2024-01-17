@@ -43,7 +43,6 @@ export const projectGenerator = async function(targetFolder: string, options: { 
 
     try {
         // Components
-
         await fs.ensureDir(join(targetFolder, "src", "components"));
         if (!options.bare) {
             const welcomeTSX = await fs.readFile(join(__dirname, "..", "assets", "Welcome.tsx"));
@@ -52,7 +51,6 @@ export const projectGenerator = async function(targetFolder: string, options: { 
 
         // CSS
         await fs.ensureDir(join(targetFolder, "src", "css"));
-
         if (!options.bare) {
             // projectCSS
             const projectCSS = await fs.readFile(join(__dirname, "..", "assets", "project.css"));
