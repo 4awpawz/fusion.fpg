@@ -10,6 +10,6 @@ Run the following in your terminal to install fusion.fpg:
 npm i -g @4awpawz/fusion.fpg
 ```
 
-# Usage
+## Usage
 
 From the command line, run `fpg` to display help.
