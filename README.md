@@ -1,6 +1,6 @@
 # fusion.fpg project generator
 
-v1.0.0
+v1.1.0
 
 ## Installation Instructions
 
@@ -10,6 +10,6 @@ Run the following in your terminal to install fusion.fpg:
 npm i -g @4awpawz/fusion.fpg
 ```
 
-# Usage
+## Usage
 
 From the command line, run `fpg` to display help.
